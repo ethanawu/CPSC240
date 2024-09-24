@@ -9,26 +9,14 @@ section .text
     global _start
 
 _start:
-    ; Load num1 into AX (16-bit register)
-    mov ax, [num1]              ; AX = 0x1234
-    
-    ; Subtract num2 from AX
-    sub ax, [num2]              ; AX = num1 - num2 (0x1234 - 0xFEDC)
-    
-    ; Store the result (lower 16 bits) into dif
-    mov [dif], ax               ; Store result in dif (lower 16 bits)
-    
-    ; Handle the sign extension for 32-bit result
-    ; If the result is negative, the carry flag will be set
-    ; Here, we need to handle the sign extension
-    movzx eax, word [dif]       ; Zero-extend 16-bit result to 32-bit in EAX
-    sub eax, 0x8000             ; Convert to signed by subtracting 0x8000 if result was negative
-    
-    ; Store the final result in dif
-    mov [dif], eax              ; Store the 32-bit result in dif
-
-    ; Exit the program
-    mov rax, SYS_exit           ; Exit system call number
-    mov rdi, EXIT_SUCCESS       ; Exit status
-    syscall                     ; Call kernel
+	mov ax, word[num1]             
+	sub ax, word[num2]   
+	adc dx, 0       
+	
+	mov	[dif], ax
+  	mov	[dif+2], dx
+  	
+    	mov rax, SYS_exit           ; Exit system call number
+    	mov rdi, EXIT_SUCCESS       ; Exit status
+    	syscall                     ; Call kernel
 
